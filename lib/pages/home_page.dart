@@ -1,6 +1,7 @@
 import 'package:digitalot/pages/IndustryPage.dart';
 import 'package:digitalot/pages/farmingPage.dart';
 import 'package:digitalot/pages/homepage.dart';
+import 'package:digitalot/pages/loginpage.dart';
 import 'package:digitalot/pages/settingsPage.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomePage(),
     IndustryPage(),
     FarmingPage(),
-    SettingsPage(),
+    LoginPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -60,8 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined, size: 30),
-              activeIcon: Icon(Icons.settings, size: 30),
+              icon: Icon(Icons.logout, size: 30),
+              activeIcon: Icon(Icons.logout, size: 30),
               label: '',
             ),
           ],
