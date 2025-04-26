@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+import 'package:wifi_iot/wifi_iot.dart';
 
 const String backendUrl = 'https://iot-server-opc9.onrender.com';
 
@@ -507,12 +510,12 @@ class _HomePageState extends State<HomePage> {
                     minHeight: constraints.maxHeight,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Padding(
-                          padding: EdgeInsets.only(bottom: 16),
+                          padding: EdgeInsets.only(bottom: 5),
                           child: Row(
                             children: [
                               Column(
@@ -581,6 +584,34 @@ class _HomePageState extends State<HomePage> {
                                   : _buildMicButton(),
                             ],
                           ),
+                        ),
+
+                        // Toggle Switch
+                        ToggleSwitch(
+                          minWidth: 100.0,
+                          cornerRadius: 20.0,
+                          activeBgColors: [
+                            [Colors.blue],
+                            [Colors.lightBlueAccent]
+                          ],
+                          activeFgColor: Colors.white,
+                          inactiveBgColor: Colors.grey,
+                          inactiveFgColor: Colors.white,
+                          initialLabelIndex: 0, // 0 for WiFi, 1 for Bluetooth
+                          totalSwitches: 2,
+                          labels: ['WiFi', 'Bluetooth'],
+                          icons: [Icons.wifi, Icons.bluetooth],
+                          onToggle: (index) {
+                            if (index == 0) {
+                              // Switch to WiFi mode
+                              enableWiFi();
+                              disableBluetooth();
+                            } else {
+                              // Switch to Bluetooth mode
+                              enableBluetooth();
+                              disableWiFi();
+                            }
+                          },
                         ),
 
                         // If auto mode is on, show the configuration options
@@ -903,5 +934,22 @@ class _HomePageState extends State<HomePage> {
       },
       onEnd: () => setState(() {}),
     );
+  }
+
+  Future<void> enableWiFi() async {
+    await WiFiForIoTPlugin.setEnabled(true);
+  }
+
+  Future<void> disableWiFi() async {
+    await WiFiForIoTPlugin.setEnabled(false);
+  }
+
+  Future<void> enableBluetooth() async {
+    await FlutterBluePlus.turnOn();
+  }
+
+  Future<void> disableBluetooth() async {
+    // ignore: deprecated_member_use
+    await FlutterBluePlus.turnOff();
   }
 }
